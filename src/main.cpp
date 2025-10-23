@@ -3,9 +3,11 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QMessageBox>
+#include "ButtonLogic.hpp"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
+    ButtonLogic logic;
 
     // Create the main widget (window)
     QWidget window;
@@ -17,12 +19,15 @@ int main(int argc, char *argv[]) {
 
     // OK button
     QPushButton *okButton = new QPushButton("OK", &window);
-    QObject::connect(okButton, &QPushButton::clicked, &app, &QApplication::quit);
+    QObject::connect(okButton, &QPushButton::clicked, [&logic, &app]() {
+        logic.incrementClickCount();
+        app.quit();
+    });
 
     // About button
     QPushButton *aboutButton = new QPushButton("About", &window);
-    QObject::connect(aboutButton, &QPushButton::clicked, [&]() {
-        QMessageBox::information(&window, "About", "This is a simple Qt app built with CMake.\nLearn more at qt.io!");
+    QObject::connect(aboutButton, &QPushButton::clicked, [&logic, &window]() {
+        QMessageBox::information(&window, "About", QString::fromStdString(logic.getAboutMessage()));
     });
 
     // Add buttons to layout
