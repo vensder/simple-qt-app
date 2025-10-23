@@ -87,3 +87,50 @@ Run the application:
 ```
 
 You should see a window with "OK" and "About" buttons. Click "OK" to exit, or "About" to see a message.
+
+## Running Tests
+
+The project includes unit tests for the ButtonLogic class using Catch2.
+
+From the build directory, run:
+
+```sh
+ctest -V
+```
+
+Or run the test executable directly for detailed output:
+
+```sh
+./tests/TestSimpleQtApp
+```
+
+Expected output: All tests should pass (e.g., 3 assertions in 2 test cases).
+
+## Continuous Integration
+
+This project uses GitHub Actions for CI. The workflow (`ci.yml`) runs on every push or pull request to the main branch, performing:
+
+- Installation of Qt5, CMake, and build tools.
+- Downloading Catch2.
+- Building the app and tests.
+- Running tests with CTest.
+
+Check the Actions tab in the GitHub repository to view build/test results.
+
+## Troubleshooting
+
+- Qt not found? Ensure Qt5 is installed and set `CMAKE_PREFIX_PATH` as above.
+- Catch2 issues? Verify `external/Catch2/catch.hpp` exists or re-download:
+
+```sh
+mkdir -p external/Catch2
+wget -O external/Catch2/catch.hpp https://github.com/catchorg/Catch2/releases/download/v2.13.10/catch.hpp
+```
+
+- Build errors? Clear the build directory and retry:
+
+```sh
+rm -rf build/*
+cmake ..
+make
+```
