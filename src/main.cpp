@@ -18,32 +18,29 @@ int main(int argc, char *argv[]) {
 
     // Set up layout
     QVBoxLayout *layout = new QVBoxLayout(&window);
-
-    // Add a stretch to push content to the bottom
-    layout->addStretch();
-
-    // Label with text
-    QLabel *label = new QLabel("Hello, Qt!", &window);
+    layout->setSpacing(10); // Add spacing between widgets for better appearance
 
     // OK button
     QPushButton *okButton = new QPushButton("OK", &window);
     QObject::connect(okButton, &QPushButton::clicked, [&logic, &app]() {
-        logic.incrementClickCount();
+        logic.incrementClickCount(); // Still increments internal count
         app.quit();
     });
 
     // About button
     QPushButton *aboutButton = new QPushButton("About", &window);
-    QObject::connect(aboutButton, &QPushButton::clicked, [&logic, &window, &label]() {
+    QLabel *clickLabel = new QLabel("Button clicked 0 time(s)", &window); // Initialize with count
+    QObject::connect(aboutButton, &QPushButton::clicked, [&logic, &window, clickLabel]() {
         QMessageBox::information(&window, "About", QString::fromStdString(logic.getAboutMessage()));
-        int i = logic.incrementClickCount();
-        label->setText(QString("Button clicked %1 time(s)").arg(i));
+        int count = logic.incrementClickCount();
+        clickLabel->setText(QString("Button clicked %1 time(s)").arg(count));
     });
 
-    // Add buttons to layout
-    layout->addWidget(okButton);
-    layout->addWidget(aboutButton);
-    layout->addWidget(label, 0, Qt::AlignLeft);
+    // Add widgets to layout
+    layout->addWidget(okButton, 0, Qt::AlignCenter);
+    layout->addWidget(aboutButton, 0, Qt::AlignCenter);
+    layout->addWidget(clickLabel, 0, Qt::AlignCenter);
+    layout->addStretch(); // Stretch at the end to push content up slightly
 
     window.show();
     return app.exec();
