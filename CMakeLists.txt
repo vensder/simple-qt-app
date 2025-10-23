@@ -13,6 +13,9 @@ set(CMAKE_AUTORCC ON)
 # Find Qt5 package
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
+# Add include directories
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
+
 # Add source files
 add_executable(SimpleQtApp
     src/main.cpp
