@@ -16,15 +16,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4  # Latest version for checking out code
 
-    # # Step 2: Install system dependencies (Qt5, CMake, build tools)
-    # - name: Install dependencies
-    #   run: |
-    #     sudo apt-get update
-    #     sudo apt-get install -y --no-install-suggests --no-install-recommends \
-    #       qtbase5-dev qttools5-dev-tools \
-    #       cmake \
-    #       build-essential \
-    #       wget
+    # Step 2: Install system dependencies (Qt5, CMake, build tools)
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-suggests --no-install-recommends \
+          qtbase5-dev qttools5-dev-tools \
+          cmake \
+          build-essential \
+          wget
 
     # # Step 3: Download Catch2 single-header
     # - name: Setup Catch2
