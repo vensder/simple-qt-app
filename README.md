@@ -1,58 +1,89 @@
-# Simple Qt-based project for Ubuntu with KDE.
-Qt is a great choice for GUI development as it's native to KDE and well-supported. 
-We'll start with a very simple C++ application using Qt: a window with two buttons ("OK" and "About"). The "OK" button will close the window, and the "About" button will display a simple message box. This will help you get familiar with CMake basics like project setup, finding dependencies (Qt), compiling C++ sources, and building executables.
-For now, focus on getting this running to learn the build process with CMake.
+# Simple Qt-based Project for Ubuntu with KDE
+
+This is a simple C++ project using Qt 5 and CMake, designed to help learn CMake through a pet project. It creates a GUI window with two buttons: "OK" (closes the app) and "About" (shows a message box). The project includes unit tests with Catch2 and a GitHub Actions CI pipeline to automate building and testing.
+
+This project is a foundation for a future typing tutor application, with a focus on learning CMake basics like project setup, dependency management, and testing.
+
+## Features
+
+- Qt 5 GUI with two buttons (OK and About).
+- CMake-based build system.
+- Unit tests for non-GUI logic using Catch2.
+- Continuous Integration (CI) with GitHub Actions to build and test on Ubuntu.
 
 ## Prerequisites
 
-- Install Qt development packages on Ubuntu (if not already done):
+- **Ubuntu with KDE** (tested on Ubuntu 22.04).
+- Install required packages:
 
 ```sh
 sudo apt update
-sudo apt install qtbase5-dev qttools5-dev-tools cmake g++ build-essential
+sudo apt install -y qtbase5-dev qttools5-dev-tools cmake g++ build-essential
 ```
 
-- This gives you Qt 5 (default on many Ubuntu versions; if you prefer Qt 6, adjust packages to `qt6-base-dev` etc., but we'll use Qt 5 for simplicity as it's widely used).
-- CMake (version 3.16+ recommended).
+- CMake: Version 3.16 or higher.
+- Catch2: Included in `external/Catch2/catch.hpp` (downloaded automatically by CI or manually as needed).
+- Qt 5: Default for this project (Qt 6 requires package changes, e.g., `qt6-base-dev`).
 
 ## Project Structure
 
 ```sh
 simple-qt-app/
-├── CMakeLists.txt
-└── src/main.cpp
+├── CMakeLists.txt           # Root CMake configuration
+├── src/                    # Source files
+│   ├── main.cpp            # Main Qt application
+│   ├── ButtonLogic.hpp     # Logic class for button actions
+│   ├── ButtonLogic.cpp     # Implementation of ButtonLogic
+├── tests/                  # Unit tests
+│   ├── CMakeLists.txt      # Test-specific CMake configuration
+│   ├── test_ButtonLogic.cpp # Tests for ButtonLogic
+├── external/               # External dependencies
+│   ├── Catch2/catch.hpp    # Catch2 testing framework
+└── .github/workflows/       # CI pipeline
+    ├── ci.yml              # GitHub Actions workflow
 ```
 
 ## Build and Run the Project
 
-From the simple-qt-app directory:
+Clone the repository:
 
-- Create a build directory (good practice to keep source clean):
+```sh
+git clone <repository-url>
+cd simple-qt-app
+```
+
+Create a build directory:
 
 ```sh
 mkdir build
 cd build
 ```
 
-- Run CMake to generate build files:
+Configure CMake:
 
 ```sh
 cmake ..
 ```
 
-This checks for Qt and sets up the project. If Qt isn't found, ensure paths are correct (e.g., add `export CMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt5` if needed).
+If Qt isn't found, set the path:
 
+```sh
+export CMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt5
+cmake ..
+```
 
-- Build the executable:
+Build the project:
 
 ```sh
 make
 ```
 
-Or `cmake --build .` for portability.
+Or use `cmake --build .` for portability.
 
-- Run it:
+Run the application:
 
-`text./SimpleQtApp`
+```sh
+./SimpleQtApp
+```
 
-You should see a window with "OK" and "About" buttons.
+You should see a window with "OK" and "About" buttons. Click "OK" to exit, or "About" to see a message.
