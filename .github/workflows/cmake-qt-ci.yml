@@ -1,0 +1,61 @@
+name: CMake Qt CI
+
+# Trigger on push or pull requests to main branche
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+
+    steps:
+    # Step 1: Checkout the repository code
+    - name: Checkout code
+      uses: actions/checkout@v4  # Latest version for checking out code
+
+    # # Step 2: Install system dependencies (Qt5, CMake, build tools)
+    # - name: Install dependencies
+    #   run: |
+    #     sudo apt-get update
+    #     sudo apt-get install -y --no-install-suggests --no-install-recommends \
+    #       qtbase5-dev qttools5-dev-tools \
+    #       cmake \
+    #       build-essential \
+    #       wget
+
+    # # Step 3: Download Catch2 single-header
+    # - name: Setup Catch2
+    #   run: |
+    #     mkdir -p external/Catch2
+    #     wget -O external/Catch2/catch.hpp \
+    #       https://github.com/catchorg/Catch2/releases/download/v2.13.10/catch.hpp
+
+    # Step 4: Configure CMake build
+    - name: Configure CMake
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+
+    # Step 5: Build the project
+    - name: Build
+      run: |
+        cd build
+        cmake --build . --parallel  # Use all cores for faster build
+
+    # Step 6: Run tests
+    - name: Test
+      working-directory: build  # Run from build dir
+      run: |
+        ctest -V  # Verbose output for better debugging
+
+    # Step 7: (Optional) Upload test artifacts if tests fail
+    - name: Upload test logs on failure
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-logs
+        path: build/Testing/**/*
